@@ -33,10 +33,11 @@ final class Client {
     static let shopDomain = "graphql.myshopify.com"
     static let apiKey     = "8e2fef6daed4b93cf4e731f580799dd1"
     static let merchantID = "merchant.com.your.id"
+    static let language   = "en-US"
     
     static let shared = Client()
     
-    private let client: Graph.Client = Graph.Client(shopDomain: Client.shopDomain, apiKey: Client.apiKey)
+    private let client: Graph.Client = Graph.Client(shopDomain: Client.shopDomain, apiKey: Client.apiKey, language: Client.language)
     
     // ----------------------------------
     //  MARK: - Init -
