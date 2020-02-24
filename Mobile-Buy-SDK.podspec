@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
   }
 
   s.source = {
-    :git        => 'https://github.com/Shopify/mobile-buy-sdk-ios.git',
+    :git        => 'https://github.com/mihai-moldovan/mobile-buy-sdk-ios.git',
     :tag        => s.version,
     :submodules => true
   }

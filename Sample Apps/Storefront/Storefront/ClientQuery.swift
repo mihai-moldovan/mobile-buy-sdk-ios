@@ -52,6 +52,22 @@ final class ClientQuery {
         }
     }
     
+    static func mutationForLoginMultiPass(token: String) -> Storefront.MutationQuery {
+        return Storefront.buildMutation { $0
+            .customerAccessTokenCreateWithMultipass(multipassToken: token) { $0
+                .customerAccessToken { $0
+                    .accessToken()
+                    .expiresAt()
+                }
+                .customerUserErrors { $0
+                    .code()
+                    .field()
+                    .message()
+                }
+            }
+        }
+    }
+    
     static func mutationForLogout(accessToken: String) -> Storefront.MutationQuery {
         return Storefront.buildMutation { $0
             .customerAccessTokenDelete(customerAccessToken: accessToken) { $0
@@ -306,8 +322,8 @@ final class ClientQuery {
             paymentAmount:  paymentAmount,
             idempotencyKey: idempotencyToken,
             billingAddress: mailingAddress,
-            type:           CheckoutViewModel.PaymentType.applePay.rawValue,
-            paymentData:    token
+            paymentData:    token,
+            type:           CheckoutViewModel.PaymentType.applePay.rawValue
         )
         
         return Storefront.buildMutation { $0
