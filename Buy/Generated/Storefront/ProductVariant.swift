@@ -305,6 +305,13 @@ extension Storefront {
 			return self
 		}
 
+		/// The total sellable quantity of the variant for online sales channels. 
+		@discardableResult
+		open func quantityAvailable(alias: String? = nil) -> ProductVariantQuery {
+			addField(field: "quantityAvailable", aliasSuffix: alias)
+			return self
+		}
+
 		/// Whether a customer needs to provide a shipping address when placing an 
 		/// order for the product variant. 
 		@discardableResult
@@ -463,6 +470,13 @@ extension Storefront {
 					throw SchemaViolationError(type: ProductVariant.self, field: fieldName, value: fieldValue)
 				}
 				return try Product(fields: value)
+
+				case "quantityAvailable":
+				if value is NSNull { return nil }
+				guard let value = value as? Int else {
+					throw SchemaViolationError(type: ProductVariant.self, field: fieldName, value: fieldValue)
+				}
+				return Int32(value)
 
 				case "requiresShipping":
 				guard let value = value as? Bool else {
@@ -663,6 +677,15 @@ extension Storefront {
 
 		func internalGetProduct(alias: String? = nil) -> Storefront.Product {
 			return field(field: "product", aliasSuffix: alias) as! Storefront.Product
+		}
+
+		/// The total sellable quantity of the variant for online sales channels. 
+		open var quantityAvailable: Int32? {
+			return internalGetQuantityAvailable()
+		}
+
+		func internalGetQuantityAvailable(alias: String? = nil) -> Int32? {
+			return field(field: "quantityAvailable", aliasSuffix: alias) as! Int32?
 		}
 
 		/// Whether a customer needs to provide a shipping address when placing an 

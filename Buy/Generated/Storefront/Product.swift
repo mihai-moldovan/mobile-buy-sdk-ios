@@ -430,6 +430,13 @@ extension Storefront {
 			return self
 		}
 
+		/// The total quantity of inventory in stock for this Product. 
+		@discardableResult
+		open func totalInventory(alias: String? = nil) -> ProductQuery {
+			addField(field: "totalInventory", aliasSuffix: alias)
+			return self
+		}
+
 		/// The date and time when the product was last modified. 
 		@discardableResult
 		open func updatedAt(alias: String? = nil) -> ProductQuery {
@@ -443,7 +450,7 @@ extension Storefront {
 		/// returned. 
 		///
 		/// - parameters:
-		///     - selectedOptions: No description
+		///     - selectedOptions: The input fields used for a selected option.
 		///
 		@discardableResult
 		open func variantBySelectedOptions(alias: String? = nil, selectedOptions: [SelectedOptionInput], _ subfields: (ProductVariantQuery) -> Void) -> ProductQuery {
@@ -641,6 +648,13 @@ extension Storefront {
 					throw SchemaViolationError(type: Product.self, field: fieldName, value: fieldValue)
 				}
 				return value
+
+				case "totalInventory":
+				if value is NSNull { return nil }
+				guard let value = value as? Int else {
+					throw SchemaViolationError(type: Product.self, field: fieldName, value: fieldValue)
+				}
+				return Int32(value)
 
 				case "updatedAt":
 				guard let value = value as? String else {
@@ -879,6 +893,15 @@ extension Storefront {
 
 		func internalGetTitle(alias: String? = nil) -> String {
 			return field(field: "title", aliasSuffix: alias) as! String
+		}
+
+		/// The total quantity of inventory in stock for this Product. 
+		open var totalInventory: Int32? {
+			return internalGetTotalInventory()
+		}
+
+		func internalGetTotalInventory(alias: String? = nil) -> Int32? {
+			return field(field: "totalInventory", aliasSuffix: alias) as! Int32?
 		}
 
 		/// The date and time when the product was last modified. 
