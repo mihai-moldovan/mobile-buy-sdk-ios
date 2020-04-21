@@ -84,6 +84,16 @@ extension Storefront {
 			return self
 		}
 
+		/// The compare at price of the product across all variants. 
+		@discardableResult
+		open func compareAtPriceRange(alias: String? = nil, _ subfields: (ProductPriceRangeQuery) -> Void) -> ProductQuery {
+			let subquery = ProductPriceRangeQuery()
+			subfields(subquery)
+
+			addField(field: "compareAtPriceRange", aliasSuffix: alias, subfields: subquery)
+			return self
+		}
+
 		/// The date and time when the product was created. 
 		@discardableResult
 		open func createdAt(alias: String? = nil) -> ProductQuery {
@@ -545,6 +555,12 @@ extension Storefront {
 				}
 				return try CollectionConnection(fields: value)
 
+				case "compareAtPriceRange":
+				guard let value = value as? [String: Any] else {
+					throw SchemaViolationError(type: Product.self, field: fieldName, value: fieldValue)
+				}
+				return try ProductPriceRange(fields: value)
+
 				case "createdAt":
 				guard let value = value as? String else {
 					throw SchemaViolationError(type: Product.self, field: fieldName, value: fieldValue)
@@ -706,6 +722,15 @@ extension Storefront {
 
 		func internalGetCollections(alias: String? = nil) -> Storefront.CollectionConnection {
 			return field(field: "collections", aliasSuffix: alias) as! Storefront.CollectionConnection
+		}
+
+		/// The compare at price of the product across all variants. 
+		open var compareAtPriceRange: Storefront.ProductPriceRange {
+			return internalGetCompareAtPriceRange()
+		}
+
+		func internalGetCompareAtPriceRange(alias: String? = nil) -> Storefront.ProductPriceRange {
+			return field(field: "compareAtPriceRange", aliasSuffix: alias) as! Storefront.ProductPriceRange
 		}
 
 		/// The date and time when the product was created. 
@@ -958,6 +983,10 @@ extension Storefront {
 					case "collections":
 					response.append(internalGetCollections())
 					response.append(contentsOf: internalGetCollections().childResponseObjectMap())
+
+					case "compareAtPriceRange":
+					response.append(internalGetCompareAtPriceRange())
+					response.append(contentsOf: internalGetCompareAtPriceRange().childResponseObjectMap())
 
 					case "images":
 					response.append(internalGetImages())

@@ -1,5 +1,5 @@
 //
-//  ProductImageSortKeys.swift
+//  OrderFulfillmentStatus.swift
 //  Buy
 //
 //  Created by Shopify.
@@ -27,22 +27,28 @@
 import Foundation
 
 extension Storefront {
-	/// The set of valid sort keys for the ProductImage query. 
-	public enum ProductImageSortKeys: String {
-		/// Sort by the `created_at` value. 
-		case createdAt = "CREATED_AT"
+	/// Represents the order's current fulfillment status. 
+	public enum OrderFulfillmentStatus: String {
+		/// Displayed as **Fulfilled**. 
+		case fulfilled = "FULFILLED"
 
-		/// Sort by the `id` value. 
-		case id = "ID"
+		/// Displayed as **In progress**. 
+		case inProgress = "IN_PROGRESS"
 
-		/// Sort by the `position` value. 
-		case position = "POSITION"
+		/// Displayed as **Open**. 
+		case `open` = "OPEN"
 
-		/// During a search (i.e. when the `query` parameter has been specified on the 
-		/// connection) this sorts the results by relevance to the search term(s). When 
-		/// no search query is specified, this sort key is not deterministic and should 
-		/// not be used. 
-		case relevance = "RELEVANCE"
+		/// Displayed as **Partially fulfilled**. 
+		case partiallyFulfilled = "PARTIALLY_FULFILLED"
+
+		/// Displayed as **Pending fulfillment**. 
+		case pendingFulfillment = "PENDING_FULFILLMENT"
+
+		/// Displayed as **Restocked**. 
+		case restocked = "RESTOCKED"
+
+		/// Displayed as **Unfulfilled**. 
+		case unfulfilled = "UNFULFILLED"
 
 		case unknownValue = ""
 	}

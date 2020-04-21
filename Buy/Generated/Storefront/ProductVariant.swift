@@ -67,6 +67,14 @@ extension Storefront {
 			return self
 		}
 
+		/// Whether the product variant is available for sale but currently out of 
+		/// stock. 
+		@discardableResult
+		open func currentlyNotInStock(alias: String? = nil) -> ProductVariantQuery {
+			addField(field: "currentlyNotInStock", aliasSuffix: alias)
+			return self
+		}
+
 		/// Globally unique identifier. 
 		@discardableResult
 		open func id(alias: String? = nil) -> ProductVariantQuery {
@@ -415,6 +423,12 @@ extension Storefront {
 				}
 				return try MoneyV2(fields: value)
 
+				case "currentlyNotInStock":
+				guard let value = value as? Bool else {
+					throw SchemaViolationError(type: ProductVariant.self, field: fieldName, value: fieldValue)
+				}
+				return value
+
 				case "id":
 				guard let value = value as? String else {
 					throw SchemaViolationError(type: ProductVariant.self, field: fieldName, value: fieldValue)
@@ -573,6 +587,16 @@ extension Storefront {
 
 		func internalGetCompareAtPriceV2(alias: String? = nil) -> Storefront.MoneyV2? {
 			return field(field: "compareAtPriceV2", aliasSuffix: alias) as! Storefront.MoneyV2?
+		}
+
+		/// Whether the product variant is available for sale but currently out of 
+		/// stock. 
+		open var currentlyNotInStock: Bool {
+			return internalGetCurrentlyNotInStock()
+		}
+
+		func internalGetCurrentlyNotInStock(alias: String? = nil) -> Bool {
+			return field(field: "currentlyNotInStock", aliasSuffix: alias) as! Bool
 		}
 
 		/// Globally unique identifier. 

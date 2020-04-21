@@ -185,6 +185,7 @@ extension Storefront {
 		///     - checkoutId: The ID of the checkout.
 		///     - payment: The info to apply as a tokenized payment.
 		///
+		@available(*, deprecated, message:"Use `checkoutCompleteWithTokenizedPaymentV3` instead")
 		@discardableResult
 		open func checkoutCompleteWithTokenizedPaymentV2(alias: String? = nil, checkoutId: GraphQL.ID, payment: TokenizedPaymentInputV2, _ subfields: (CheckoutCompleteWithTokenizedPaymentV2PayloadQuery) -> Void) -> MutationQuery {
 			var args: [String] = []
@@ -199,6 +200,29 @@ extension Storefront {
 			subfields(subquery)
 
 			addField(field: "checkoutCompleteWithTokenizedPaymentV2", aliasSuffix: alias, args: argsString, subfields: subquery)
+			return self
+		}
+
+		/// Completes a checkout with a tokenized payment. 
+		///
+		/// - parameters:
+		///     - checkoutId: The ID of the checkout.
+		///     - payment: The info to apply as a tokenized payment.
+		///
+		@discardableResult
+		open func checkoutCompleteWithTokenizedPaymentV3(alias: String? = nil, checkoutId: GraphQL.ID, payment: TokenizedPaymentInputV3, _ subfields: (CheckoutCompleteWithTokenizedPaymentV3PayloadQuery) -> Void) -> MutationQuery {
+			var args: [String] = []
+
+			args.append("checkoutId:\(GraphQL.quoteString(input: "\(checkoutId.rawValue)"))")
+
+			args.append("payment:\(payment.serialize())")
+
+			let argsString = "(\(args.joined(separator: ",")))"
+
+			let subquery = CheckoutCompleteWithTokenizedPaymentV3PayloadQuery()
+			subfields(subquery)
+
+			addField(field: "checkoutCompleteWithTokenizedPaymentV3", aliasSuffix: alias, args: argsString, subfields: subquery)
 			return self
 		}
 
@@ -1081,6 +1105,13 @@ extension Storefront {
 				}
 				return try CheckoutCompleteWithTokenizedPaymentV2Payload(fields: value)
 
+				case "checkoutCompleteWithTokenizedPaymentV3":
+				if value is NSNull { return nil }
+				guard let value = value as? [String: Any] else {
+					throw SchemaViolationError(type: Mutation.self, field: fieldName, value: fieldValue)
+				}
+				return try CheckoutCompleteWithTokenizedPaymentV3Payload(fields: value)
+
 				case "checkoutCreate":
 				if value is NSNull { return nil }
 				guard let value = value as? [String: Any] else {
@@ -1431,9 +1462,12 @@ extension Storefront {
 		}
 
 		/// Completes a checkout with a tokenized payment. 
+		@available(*, deprecated, message:"Use `checkoutCompleteWithTokenizedPaymentV3` instead")
 		open var checkoutCompleteWithTokenizedPaymentV2: Storefront.CheckoutCompleteWithTokenizedPaymentV2Payload? {
 			return internalGetCheckoutCompleteWithTokenizedPaymentV2()
 		}
+
+		@available(*, deprecated, message:"Use `checkoutCompleteWithTokenizedPaymentV3` instead")
 
 		open func aliasedCheckoutCompleteWithTokenizedPaymentV2(alias: String) -> Storefront.CheckoutCompleteWithTokenizedPaymentV2Payload? {
 			return internalGetCheckoutCompleteWithTokenizedPaymentV2(alias: alias)
@@ -1441,6 +1475,19 @@ extension Storefront {
 
 		func internalGetCheckoutCompleteWithTokenizedPaymentV2(alias: String? = nil) -> Storefront.CheckoutCompleteWithTokenizedPaymentV2Payload? {
 			return field(field: "checkoutCompleteWithTokenizedPaymentV2", aliasSuffix: alias) as! Storefront.CheckoutCompleteWithTokenizedPaymentV2Payload?
+		}
+
+		/// Completes a checkout with a tokenized payment. 
+		open var checkoutCompleteWithTokenizedPaymentV3: Storefront.CheckoutCompleteWithTokenizedPaymentV3Payload? {
+			return internalGetCheckoutCompleteWithTokenizedPaymentV3()
+		}
+
+		open func aliasedCheckoutCompleteWithTokenizedPaymentV3(alias: String) -> Storefront.CheckoutCompleteWithTokenizedPaymentV3Payload? {
+			return internalGetCheckoutCompleteWithTokenizedPaymentV3(alias: alias)
+		}
+
+		func internalGetCheckoutCompleteWithTokenizedPaymentV3(alias: String? = nil) -> Storefront.CheckoutCompleteWithTokenizedPaymentV3Payload? {
+			return field(field: "checkoutCompleteWithTokenizedPaymentV3", aliasSuffix: alias) as! Storefront.CheckoutCompleteWithTokenizedPaymentV3Payload?
 		}
 
 		/// Creates a new checkout. 
@@ -1993,6 +2040,12 @@ extension Storefront {
 
 					case "checkoutCompleteWithTokenizedPaymentV2":
 					if let value = internalGetCheckoutCompleteWithTokenizedPaymentV2() {
+						response.append(value)
+						response.append(contentsOf: value.childResponseObjectMap())
+					}
+
+					case "checkoutCompleteWithTokenizedPaymentV3":
+					if let value = internalGetCheckoutCompleteWithTokenizedPaymentV3() {
 						response.append(value)
 						response.append(contentsOf: value.childResponseObjectMap())
 					}

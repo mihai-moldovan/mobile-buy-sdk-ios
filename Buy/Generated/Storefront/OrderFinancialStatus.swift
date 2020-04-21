@@ -1,5 +1,5 @@
 //
-//  ProductImageSortKeys.swift
+//  OrderFinancialStatus.swift
 //  Buy
 //
 //  Created by Shopify.
@@ -27,22 +27,28 @@
 import Foundation
 
 extension Storefront {
-	/// The set of valid sort keys for the ProductImage query. 
-	public enum ProductImageSortKeys: String {
-		/// Sort by the `created_at` value. 
-		case createdAt = "CREATED_AT"
+	/// Represents the order's current financial status. 
+	public enum OrderFinancialStatus: String {
+		/// Displayed as **Authorized**. 
+		case authorized = "AUTHORIZED"
 
-		/// Sort by the `id` value. 
-		case id = "ID"
+		/// Displayed as **Paid**. 
+		case paid = "PAID"
 
-		/// Sort by the `position` value. 
-		case position = "POSITION"
+		/// Displayed as **Partially paid**. 
+		case partiallyPaid = "PARTIALLY_PAID"
 
-		/// During a search (i.e. when the `query` parameter has been specified on the 
-		/// connection) this sorts the results by relevance to the search term(s). When 
-		/// no search query is specified, this sort key is not deterministic and should 
-		/// not be used. 
-		case relevance = "RELEVANCE"
+		/// Displayed as **Partially refunded**. 
+		case partiallyRefunded = "PARTIALLY_REFUNDED"
+
+		/// Displayed as **Pending**. 
+		case pending = "PENDING"
+
+		/// Displayed as **Refunded**. 
+		case refunded = "REFUNDED"
+
+		/// Displayed as **Voided**. 
+		case voided = "VOIDED"
 
 		case unknownValue = ""
 	}
